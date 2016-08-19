@@ -1,57 +1,58 @@
-# Laravel homestead-docker
-Create a homestead docker container for your development env. ( files taken from laravel settler: provision.sh (modified) + serve.sh )
+# Ambiente web docker modificado do projeto **Laravel homestead-docker**
+Esse ambiente docker monta 3 containers sendo um ambiente Web(php7, nginx, grunt, gulp, git, bower, redis, etc...), mysql 5.7 e phpmyadmin. 
 
-### Install docker && docker compose
-please refer to these tutorials:
-* install docker (https://docs.docker.com/installation/ubuntulinux/)
-```shell
-curl -sSL https://get.docker.com/ | sh
-```
-* install docker compose (https://docs.docker.com/compose/install/)
-```shell
-curl -L https://github.com/docker/compose/releases/download/1.6.0/docker-compose-`uname -s`-`uname -m` > /usr/local/bin/docker-compose
-```
+- link do projeto original (https://github.com/shincoder/homestead-docker)
+- imagem oficial mysql (https://hub.docker.com/r/mysql/mysql-server/)
+- imagem oficial phpmyadmin (https://hub.docker.com/r/phpmyadmin/phpmyadmin)
 
-### Pull homestead image
+### Instalar docker e docker compose
+* Acesse esse material para instalar o docker em ambiente linux (https://docs.docker.com/installation/ubuntulinux/)
+* Acesse esse material para instalar o docker compose (https://docs.docker.com/compose/install/)
+
+Após feita a instalação siga os passos seguintes
+
+### Baixe a imagem do ambiente web
 ```shell
 docker pull shincoder/homestead:php7.0
 ```
 
-### Clone && Edit docker-compose.yml
+### Clone o projeto em uma pasta no seu host
 ```shell
-git clone https://github.com/shincoder/homestead-docker.git
+git clone http://192.168.1.5/leo/docker-environment-web.git
 ```
-rename ```docker-compose.dist.yml``` to ```docker-compose.yml``` then edit the file with you own
-paths and ports.
 
-### Start your containers
-There are only two containers to run. web container ( includes everything except your database ),
-and mariadb container.
+### Inicie os containers
 ```shell
 sudo docker-compose up -d
 ```
 
-### SSH into the container (password: secret):
+### Entre no container web utilizando SSH (a senha solicitada é: secret)
 ```shell
 ssh -p 2222 homestead@localhost
 ```
 
-### Add a virtual host
-Assuming you mapped your apps folder to ```/apps``` (you can change mappings in the docker-compose.yml file,
-it's prefered to use absolute paths), you can do:
+### Adicione virtual hosts aos projetos
+Supondo que sua pasta mapeada é a /apps então digite o seguinte comando dentro do container web
+
 ```shell
-cd / && ./serve.sh myapp.dev /apps/myapp/public
-```
-In the host, update ``` /etc/hosts ``` to include your app domain:
-```shell
-127.0.0.1               myapp.dev
+cd / && ./serve.sh minhaapp /apps/minhaapp
 ```
 
-### That's it
-Our web container starts nginx, php-fpm, redis, beanstalk. and has gruntjs, gulp, bower...etc
-some relevant ports have been added to docker-compose.yml ( livereload standard port, karma server port ),
-change them if you need to.
+Ao fazer isso o nome 'minhaapp' já estará disponível no virtual host do nginx
 
-### Notes
-- Use docker's local IP address to connect to your database. Run `docker inspect --format '{{ .NetworkSettings.IPAddress }}' ${CID}`, where `${CID}` is docker container ID of the database
-- Databases: by default mariadb is used as a database, but you are free to use any database you want: choose from these excellent images by Tutum: [tutum/mysql](https://github.com/tutumcloud/mysql) or [tutum/postgresql](https://github.com/tutumcloud/postgresql), they expose different environment variables, so don't forget to update your docker-compose file accordingly.
+Agora saia do container web digitando 'exit' para voltar ao servidor host e edite o arquivo /etc/hosts inserindo a seguinte linha:
+```shell
+127.0.0.1               minhaapp
+```
+
+O ambiente criará os links entre o ambiente web e mysql e também mysql e phpmyadmin.
+
+Os volumes serão criados no seguinte diretório do Host:
+`~/apps/volumes`, dentro da pasta /apps poderá criar as pastas e arquivos do projeto para o ambiente público das aplicações
+
+As portas mapeadas no host serão:
+- 80 - acesso público web
+- 8080 - acesso ao phpMyAdmin
+- 33060 - porta mapeada para o mysql
+
+Caso queira alterar qualquer configuração dos containers docker, basta editar o arquivo ***docker-compose.yml***.
