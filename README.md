@@ -78,3 +78,57 @@ As portas mapeadas no host serão:
 - 33060 - porta mapeada para o mysql
 
 Caso queira alterar qualquer configuração dos containers docker, basta editar o arquivo ***docker-compose.yml***.
+
+# GUIA DE BOLSO DOCKER
+
+**Build de uma imagem**
+
+docker build -t <nome_da_imagem> <caminho_para_dockerfile>
+
+**Executar um container**
+
+docker run -d -p <porta_host>:<porta_container> --name <nome_container> <nome_imagem>
+OBS1: Nesse exemplo, eu estou fazendo um mapeamento de portas com a opção -p. Para mais detalhes, veja aqui a documentação desse tópico.
+OBS2: Você pode adicionar links entre um ou mais containers usando a opção --link <nome_container>:<alias>.
+OBS3: Você pode adicionar explicitamente uma entrada ao arquivo de hosts do container através do parâmetro --add-host <nome_host>:<endereco_IP>.
+
+**Iniciar uma sessão bash em um container que esteja rodando**
+
+docker exec -it <nome_container> bash
+
+**Ver os logs de um container**
+
+docker logs <nome_container>
+
+**Ver todas as imagens no host**
+
+docker images
+
+**Ver todos os containers**
+
+docker ps -a
+
+**Remover um container**
+
+docker rm -f <nome_container>
+
+**Remover TODOS os containers**
+
+docker rm -f $(docker ps -a -q)
+
+**Remover uma imagem**
+
+docker rmi -f <nome_imagem>
+
+**Remover dangling images (Dangling images", imagens sem uma tag)**
+
+docker rmi $(docker images -q -f dangling=true)
+
+**Copiar um arquivo do container para o host**
+
+docker cp <nome_container>:/caminho/no/container /caminho/no/host
+Exemplo: docker cp app1:/home/ec2-user/log.txt /logs
+
+**Docker stats - Verificar os recursos consumidos pelo container da máquina física**
+
+docker stats <nome_container>
