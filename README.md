@@ -45,6 +45,28 @@ Agora saia do container web digitando 'exit' para voltar ao servidor host e edit
 127.0.0.1               minhaapp
 ```
 
+### Virtual hosts de forma automática
+Para criar um virtual hosts de forma automática basta executar o arquivo **createvhost.sh** e passar os parâmetros pedidos como string do host e caminho do projeto.
+
+### Compartilhar pasta do servidor web com servidor windows
+Siga os links abaixo para realizar o compartilhamento de pastas entre servidor linux e windows
+
+Tutorial - (http://goo.gl/khaVNg)
+Vídeo - (https://www.youtube.com/watch?v=PipbcLMaHWo)
+
+### Backup automático do ambiente de desenvolvimento
+Para realizar o backup do ambiente de forma automática, basta editar o arquivo /etc/crontab do host e inserir a seguinte linha no final do arquivo:
+
+```shell
+0  3    * * *   root    sh ~/docker/homestead-docker/autbackup.sh
+```
+
+Lembrando que o caminho do arquivo **autbackup.sh** deve ser alterado caso você tenha colocado o arquivo em outro local. O crontab irá executar o script todos os dias as 3 horas da manhã, altere de acordo com sua necessidade.
+
+Altere também o script autbackup.sh e coloque o caminho de sua unidade montada no host.
+
+### Sobre o Ambiente
+
 O ambiente criará os links entre o ambiente web e mysql e também mysql e phpmyadmin.
 
 Os volumes serão criados no seguinte diretório do Host:
