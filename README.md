@@ -1,5 +1,5 @@
 # Ambiente web docker modificado do projeto **Laravel homestead-docker**
-Esse ambiente docker monta 3 containers sendo um ambiente Web(php7, nginx, grunt, gulp, git, bower, redis, etc...), mysql 5.7 e phpmyadmin. 
+Esse ambiente docker monta 4 containers sendo um ambiente Web nginx php7.0(php7, nginx, grunt, gulp, git, bower, redis, etc...), um ambiente web nginx php5.6, mysql 5.7 e phpmyadmin. 
 
 - link do projeto original (https://github.com/shincoder/homestead-docker)
 - imagem oficial mysql (https://hub.docker.com/r/mysql/mysql-server/)
@@ -26,7 +26,11 @@ git clone http://192.168.1.5/leo/docker-environment-web.git
 sudo docker-compose up -d
 ```
 
-### Entre no container web utilizando SSH (a senha solicitada é: secret)
+### Entre no container php7.0 utilizando SSH (a senha solicitada é: secret)
+```shell
+ssh -p 2221 homestead@localhost
+```
+### Entre no container php5.6 utilizando SSH (a senha solicitada é: secret)
 ```shell
 ssh -p 2222 homestead@localhost
 ```
@@ -46,7 +50,7 @@ Agora saia do container web digitando 'exit' para voltar ao servidor host e edit
 ```
 
 ### Virtual hosts de forma automática
-Para criar um virtual hosts de forma automática basta executar o arquivo **createvhost.sh** e passar os parâmetros pedidos como string do host e caminho do projeto.
+Para criar um virtual hosts de forma automática basta executar o arquivo **nginx7vhost.sh** para o container php7.0 e **nginx5vhost.sh** para o container php5.6 e passar os parâmetros pedidos como string do host e caminho do projeto.
 
 ### Compartilhar pasta do servidor web com servidor windows
 Siga os links abaixo para realizar o compartilhamento de pastas entre servidor linux e windows
@@ -54,11 +58,23 @@ Siga os links abaixo para realizar o compartilhamento de pastas entre servidor l
 Tutorial - (http://goo.gl/khaVNg)
 Vídeo - (https://www.youtube.com/watch?v=PipbcLMaHWo)
 
+Caso queira compartilhar uma pasta mapeada por um HD Externo ou pendrive do linux para windows, edite o arquivo /etc/samba/smb.conf e acrescente a linha seguinte:
+
+```shell
+usershare owner only = false
+```
+
+Reinicie o samba com
+
+```shell
+sudo service samba reload
+```
+
 ### Backup automático do ambiente de desenvolvimento
 Para realizar o backup do ambiente de forma automática, basta editar o arquivo /etc/crontab do host e inserir a seguinte linha no final do arquivo:
 
 ```shell
-0  3    * * *   root    sh ~/docker/homestead-docker/autbackup.sh
+0  3    * * *   root    ~/docker/homestead-docker/autbackup.sh
 ```
 
 Lembrando que o caminho do arquivo **autbackup.sh** deve ser alterado caso você tenha colocado o arquivo em outro local. O crontab irá executar o script todos os dias as 3 horas da manhã, altere de acordo com sua necessidade.
@@ -67,17 +83,19 @@ Altere também o script autbackup.sh e coloque o caminho de sua unidade montada 
 
 ### Sobre o Ambiente
 
-O ambiente criará os links entre o ambiente web e mysql e também mysql e phpmyadmin.
+O ambiente criará os links entre os dois ambientes web e mysql e também mysql e phpmyadmin.
 
 Os volumes serão criados no seguinte diretório do Host:
-`~/apps/volumes`, dentro da pasta /apps poderá criar as pastas e arquivos do projeto para o ambiente público das aplicações
+
+**~/apps/volumes** para o container php7.0 e **~/apps/valumessites** para o container php5.6. Dentro da pasta ~/apps/www(projetos do container php7.0) e  ~/apps/sites (projetos do container php5.6) é onde ficarão as pastas e arquivos dos projetos que poderão ser acessados publicamente.
 
 As portas mapeadas no host serão:
-- 80 - acesso público web
+- 80 - acesso público container php5.6
+- 8000 - acesso público container php7.0
 - 8080 - acesso ao phpMyAdmin
 - 33060 - porta mapeada para o mysql
 
-Caso queira alterar qualquer configuração dos containers docker, basta editar o arquivo ***docker-compose.yml***.
+Caso queira alterar qualquer configuração dos containers docker, basta editar o arquivo **docker-compose.yml**.
 
 # GUIA DE BOLSO DOCKER
 

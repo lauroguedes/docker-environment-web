@@ -8,7 +8,7 @@ read path
  
 echo "Criando configuração de VHost para o servidor"
 
-docker exec -d web sudo sh /serve.sh $vhost $path
+docker exec -d nginx-php-7.0 sudo sh /serve.sh $vhost $path
 
 echo "127.0.0.1		$vhost" >> "/etc/hosts"
 
