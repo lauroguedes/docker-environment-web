@@ -1,5 +1,5 @@
 # Ambiente web docker modificado do projeto **Laravel homestead-docker**
-Esse ambiente docker monta 4 containers sendo um ambiente Web nginx php7.0(php7, nginx, grunt, gulp, git, bower, redis, etc...), um ambiente web nginx php5.6, mysql 5.7 e phpmyadmin. 
+Esse ambiente docker monta 5 containers sendo um ambiente Web nginx php7.0(php7, nginx, grunt, gulp, git, bower, redis, etc...), um ambiente web nginx php5.6, um ambiente web apache php7.1, mysql 5.7 e phpmyadmin. 
 
 - link do projeto original (https://github.com/shincoder/homestead-docker)
 - imagem oficial mysql (https://hub.docker.com/r/mysql/mysql-server/)
@@ -32,7 +32,7 @@ ssh -p 2221 homestead@localhost
 ```
 ### Entre no container php5.6 utilizando SSH (a senha solicitada é: secret)
 ```shell
-ssh -p 2222 homestead@localhost
+ssh -p 2224 homestead@localhost
 ```
 
 ### Adicione virtual hosts aos projetos
@@ -50,7 +50,7 @@ Agora saia do container web digitando 'exit' para voltar ao servidor host e edit
 ```
 
 ### Virtual hosts de forma automática
-Para criar um virtual hosts de forma automática basta executar o arquivo **nginx7vhost.sh** para o container php7.0 e **nginx5vhost.sh** para o container php5.6 e passar os parâmetros pedidos como string do host e caminho do projeto.
+Para criar um virtual hosts de forma automática basta executar o arquivo **nginx7vhost.sh** para o container php7.0 e **nginx5vhost.sh** para o container php5.6 e **apachevhost.sh** para o container apache-php7.1 e passar os parâmetros pedidos como string do host e caminho do projeto.
 
 ### Compartilhar pasta do servidor web com servidor windows
 Siga os links abaixo para realizar o compartilhamento de pastas entre servidor linux e windows
@@ -87,11 +87,12 @@ O ambiente criará os links entre os dois ambientes web e mysql e também mysql 
 
 Os volumes serão criados no seguinte diretório do Host:
 
-**~/apps/volumes** para o container php7.0 e **~/apps/valumessites** para o container php5.6. Dentro da pasta ~/apps/www(projetos do container php7.0) e  ~/apps/sites (projetos do container php5.6) é onde ficarão as pastas e arquivos dos projetos que poderão ser acessados publicamente.
+**~/apps/volumes** para o container php7.0, **~/apps/volumessites** para o container php5.6 e **~/apps/volumeswebsites** para container apache-php7.1. Dentro da pasta ~/apps/www(projetos do container php7.0), ~/apps/sites (projetos do container php5.6) e ~/apps/websites (projetos do container apache-php7.1) é onde ficarão as pastas e arquivos dos projetos que poderão ser acessados publicamente.
 
 As portas mapeadas no host serão:
-- 80 - acesso público container php5.6
+- 80 - acesso público container apache-php7.1
 - 8000 - acesso público container php7.0
+- 8002 - acesso público container php5.6
 - 8080 - acesso ao phpMyAdmin
 - 33060 - porta mapeada para o mysql
 
