@@ -98,7 +98,15 @@ As portas mapeadas no host serão:
 
 Caso queira alterar qualquer configuração dos containers docker, basta editar o arquivo **docker-compose.yml**.
 
-# GUIA DE BOLSO DOCKER
+### Criar pasta de projeto no servidor Apache PHP 7
+
+Insira o seguinte comando no servidor web
+
+```shell
+sudo createproject.sh <tipo_projeto> <ano> <dominiodoprojeto>
+```
+
+## GUIA DE BOLSO DOCKER
 
 **Build de uma imagem**
 
