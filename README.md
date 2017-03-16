@@ -52,6 +52,14 @@ Agora saia do container web digitando 'exit' para voltar ao servidor host e edit
 ### Virtual hosts de forma automática
 Para criar um virtual hosts de forma automática basta executar o arquivo **nginx7vhost.sh** para o container php7.0 e **nginx5vhost.sh** para o container php5.6 e **apachevhost.sh** para o container apache-php7.1 e passar os parâmetros pedidos como string do host e caminho do projeto.
 
+### Criar pasta de projeto no servidor Apache PHP 7
+
+Insira o seguinte comando no servidor web
+
+```shell
+sudo createproject.sh <tipo_projeto> <ano> <dominiodoprojeto>
+```
+
 ### Compartilhar pasta do servidor web com servidor windows
 Siga os links abaixo para realizar o compartilhamento de pastas entre servidor linux e windows
 
@@ -97,14 +105,6 @@ As portas mapeadas no host serão:
 - 33060 - porta mapeada para o mysql
 
 Caso queira alterar qualquer configuração dos containers docker, basta editar o arquivo **docker-compose.yml**.
-
-### Criar pasta de projeto no servidor Apache PHP 7
-
-Insira o seguinte comando no servidor web
-
-```shell
-sudo createproject.sh <tipo_projeto> <ano> <dominiodoprojeto>
-```
 
 ## GUIA DE BOLSO DOCKER
 
