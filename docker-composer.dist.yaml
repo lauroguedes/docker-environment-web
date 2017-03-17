@@ -1,0 +1,77 @@
+web:
+    image: shincoder/homestead:php7.0
+    restart: always
+    container_name: nginx-php-7.0
+    ports:
+        - "8000:80" # web
+        - "2221:22" # ssh
+        - "35729:35729" # live reload
+        - "9876:9876" # karma server
+    volumes:
+        - ~/.composer:/home/homestead/.composer # composer caching
+        - ~/.gitconfig:/home/homestead/.gitconfig # Git configuration ( access alias && config )
+        - ~/.ssh:/home/homestead/.ssh # Ssh keys for easy deployment inside the container
+        - ~/apps/www:/apps/www # all apps
+        - ~/apps/volumes/nginx/sites-available:/etc/nginx/sites-available # nginx sites ( in case you recreate the container )
+        - ~/apps/volumes/nginx/sites-enabled:/etc/nginx/sites-enabled # nginx sites ( in case you recreate the container )
+    links:
+        - mysql
+
+web2:
+    image: shincoder/homestead:php5.6
+    restart: always
+    container_name: nginx-php-5.6
+    ports:
+        - "8002:80"
+        - "2224:22"
+    volumes:
+        - ~/.composer:/home/homestead/.composer # composer caching
+        - ~/.gitconfig:/home/homestead/.gitconfig # Git configuration ( access alias && config )
+        - ~/.ssh:/home/homestead/.ssh # Ssh keys for easy deployment inside the container
+        - ~/apps/sites:/apps/www # all apps
+        - ~/apps/volumessites/nginx/sites-available:/etc/nginx/sites-available # nginx sites ( in case you recreate the container )
+        - ~/apps/volumessites/nginx/sites-enabled:/etc/nginx/sites-enabled # nginx sites ( in case you recreate the container )
+    links:
+        - mysql
+
+web3:
+    image: eagletec/apache:php7.1
+    restart: always
+    container_name: apache-php-7.1
+    ports:
+        - "80:80"
+        - "2222:22"
+    volumes:
+        - ~/.composer:/home/homestead/.composer
+        - ~/.gitconfig:/home/homestead/.gitconfig
+        - ~/.ssh:/home/homestead/.ssh
+        - ~/apps/websites:/apps/www
+        - ~/apps/volumeswebsites/apache/sites-available:/etc/apache2/sites-available
+        - ~/apps/volumeswebsites/apache/sites-enabled:/etc/apache2/sites-enabled
+        - ~/apps/volumeswebsites/apache/php/:/usr/local/etc/php
+    links:
+        - mysql
+
+phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    container_name: phpmyadmin
+    links:
+        - mysql
+    ports:
+        - "8080:80"
+    environment:
+        PMA_HOST: mysql
+        MYSQL_USERNAME: "root"
+        MYSQL_ROOT_PASSWORD: "sites@eagle"
+
+mysql:
+    image: mysql
+    restart: always
+    container_name: mysql
+    ports:
+        - "33060:3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: "sites@eagle"
+    volumes:
+        - ~/apps/volumes/mysql:/var/lib/mysql # database files
