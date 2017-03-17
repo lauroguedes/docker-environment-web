@@ -11,6 +11,27 @@ Esse ambiente docker monta 5 containers sendo um ambiente Web nginx php7.0(php7,
 
 Após feita a instalação siga os passos seguintes
 
+### Fazer o comando docker rodar sem sudo
+1. Adicione o grupo docker caso não exista
+```shell
+sudo groupadd docker
+```
+
+2. Adicione seu usuário ao grupo docker
+```shell
+sudo gpasswd -a ${USER} docker
+```
+
+3. Reinicie o docker
+```shell
+sudo service docker restart
+```
+
+4. Ative as mudanças de grupo
+```shell
+newgrp docker
+```
+
 ### Baixe a imagem do ambiente web
 ```shell
 docker pull shincoder/homestead:php7.0
