@@ -44,7 +44,7 @@ newgrp docker
 
 ### Clone o projeto em uma pasta no seu host
 ```shell
-git clone http://192.168.1.5/leo/docker-environment-web.git
+git clone https://github.com/lauroguedes/docker-environment-web.git
 ```
 
 ### Inicie os containers
