@@ -1,11 +1,21 @@
 # Ambiente web docker modificado do projeto **Laravel homestead-docker**
-Esse ambiente docker monta 5 containers sendo um ambiente Web nginx php7.0(php7, nginx, grunt, gulp, git, bower, redis, etc...), um ambiente web nginx php5.6, um ambiente web apache php7.1, mysql 5.7 e phpmyadmin. 
+
+Esse ambiente foi criado para sanar a necessidade de utlilizar versões diferentes do php e de servidores web diferentes.
+
+Esse ambiente docker monta 5 containers sendo eles:
+- um ambiente Web nginx php7.0(php7, nginx, grunt, gulp, git, bower, redis, etc...);
+- um ambiente web nginx php5.6(php7, nginx, grunt, gulp, git, bower, redis, etc...);
+- um ambiente web apache php7.1;
+- mysql 5.7;
+- phpMyAdmin. 
 
 - link do projeto original (https://github.com/shincoder/homestead-docker)
 - imagem oficial mysql (https://hub.docker.com/r/mysql/mysql-server/)
 - imagem oficial phpmyadmin (https://hub.docker.com/r/phpmyadmin/phpmyadmin)
 
 ### Instalar docker e docker compose
+Antes de usar esse ambiente primeiramente deverá instalar o docker e o docker-compose em seu servidor.
+
 * Acesse esse material para instalar o docker em ambiente linux (https://docs.docker.com/installation/ubuntulinux/)
 * Acesse esse material para instalar o docker compose (https://docs.docker.com/compose/install/)
 
@@ -32,17 +42,13 @@ sudo service docker restart
 newgrp docker
 ```
 
-### Baixe a imagem do ambiente web
-```shell
-docker pull shincoder/homestead:php7.0
-```
-
 ### Clone o projeto em uma pasta no seu host
 ```shell
 git clone http://192.168.1.5/leo/docker-environment-web.git
 ```
 
 ### Inicie os containers
+Antes de dar o comando abaixo, abra o arquivo docker-composer.dist.yaml e configure as portas, nome dos containers, senha do mysql e volumes de acordo com sua necessidade e salve o arquivo como **docker-composer.yaml**. 
 ```shell
 sudo docker-compose up -d
 ```
@@ -51,9 +57,15 @@ sudo docker-compose up -d
 ```shell
 ssh -p 2221 homestead@localhost
 ```
+
+### Entre no container apache-php7.1 utilizando SSH (a senha solicitada é: secret)
+```shell
+ssh -p 2222 homestead@localhost
+```
+
 ### Entre no container php5.6 utilizando SSH (a senha solicitada é: secret)
 ```shell
-ssh -p 2224 homestead@localhost
+ssh -p 2223 homestead@localhost
 ```
 
 ### Adicione virtual hosts aos projetos
@@ -72,14 +84,6 @@ Agora saia do container web digitando 'exit' para voltar ao servidor host e edit
 
 ### Virtual hosts de forma automática
 Para criar um virtual hosts de forma automática basta executar o arquivo **nginx7vhost.sh** para o container php7.0 e **nginx5vhost.sh** para o container php5.6 e **apachevhost.sh** para o container apache-php7.1 e passar os parâmetros pedidos como string do host e caminho do projeto.
-
-### Criar pasta de projeto no servidor Apache PHP 7
-
-Insira o seguinte comando no servidor web
-
-```shell
-sudo createproject.sh <tipo_projeto> <ano> <dominiodoprojeto>
-```
 
 ### Compartilhar pasta do servidor web com servidor windows
 Siga os links abaixo para realizar o compartilhamento de pastas entre servidor linux e windows
@@ -103,29 +107,43 @@ sudo service samba reload
 Para realizar o backup do ambiente de forma automática, basta editar o arquivo /etc/crontab do host e inserir a seguinte linha no final do arquivo:
 
 ```shell
-0  3    * * *   root    ~/docker/homestead-docker/autbackup.sh
+0  3    * * *   root    ~/<caminho_do_projeto>/utilities/autobkp.sh
 ```
 
-Lembrando que o caminho do arquivo **autbackup.sh** deve ser alterado caso você tenha colocado o arquivo em outro local. O crontab irá executar o script todos os dias as 3 horas da manhã, altere de acordo com sua necessidade.
+Lembrando que o caminho do arquivo **autobkp.sh** deve ser alterado caso você tenha colocado o arquivo em outro local. O crontab irá executar o script todos os dias as 3 horas da manhã, altere de acordo com sua necessidade.
 
-Altere também o script autbackup.sh e coloque o caminho de sua unidade montada no host.
+Altere também o script autobkp.sh e coloque o caminho de sua unidade montada no host.
 
-### Sobre o Ambiente
+## Utilitários
+Esse projeto vem com alguns utilitários que podem ser úteis para seu ambiente. Lembrando que todos os arquivos que tem o sufixo **-dist** são modificáveis para cada ambiente e por esse motivo devem ser copiados no seu projeto sem o sufixo e o seu conteúdo deve ser alterado de acordo com sua necessidade.
+- autobkp-dist.sh: Esse script executa uma rotina de backup automático para alguma outra mídia utilizando o rsync;
+- apachevhost.sh - Cria virtual hosts para o container apache-php-7.1;
+- nginx7vhost.sh - Cria virtual hosts para o container nginx-php-7.0;
+- nginx5vhost.sh - Cria virtual hosts para o container nginx-php-5.6;
+- windows-host-dist.bat - Cria virtual host para ambiente windows.
 
-O ambiente criará os links entre os dois ambientes web e mysql e também mysql e phpmyadmin.
+## Criando Alias para agilisar execução de comandos no Servidor
 
-Os volumes serão criados no seguinte diretório do Host:
+Abra o arquivo /etc/bash.bashrc (com isso, todos os usuários vão ter acesso a esses aliases), digite: 
 
-**~/apps/volumes** para o container php7.0, **~/apps/volumessites** para o container php5.6 e **~/apps/volumeswebsites** para container apache-php7.1. Dentro da pasta ~/apps/www(projetos do container php7.0), ~/apps/sites (projetos do container php5.6) e ~/apps/websites (projetos do container apache-php7.1) é onde ficarão as pastas e arquivos dos projetos que poderão ser acessados publicamente.
+```shell
+sudo vim /etc/bash.bashrc
+```
 
-As portas mapeadas no host serão:
-- 80 - acesso público container apache-php7.1
-- 8000 - acesso público container php7.0
-- 8002 - acesso público container php5.6
-- 8080 - acesso ao phpMyAdmin
-- 33060 - porta mapeada para o mysql
+E cole os comandos abaixo: 
 
-Caso queira alterar qualquer configuração dos containers docker, basta editar o arquivo **docker-compose.yml**.
+```shell
+alias c='clear'
+alias upgrade='sudo apt-get upgrade'
+alias reiniciar='sudo reboot'
+alias desligar='sudo shutdown -h now'
+alias update='sudo apt-get update'
+# Entrar nos containers via bash
+alias n7bash='docker exec -it nginx-php-7.0 bash'
+alias n5bash='docker exec -it nginx-php-5.6 bash'
+alias a7bash='docker exec -it apache-php-7.1 bash'
+```
+
 
 ## GUIA DE BOLSO DOCKER
 

@@ -1,9 +1,9 @@
 web:
-    image: shincoder/homestead:php7.0
+    image: leowgweb/nginx-php-7.0
     restart: always
     container_name: nginx-php-7.0
     ports:
-        - "8000:80" # web
+        - "80:80" # web
         - "2221:22" # ssh
         - "35729:35729" # live reload
         - "9876:9876" # karma server
@@ -11,44 +11,46 @@ web:
         - ~/.composer:/home/homestead/.composer # composer caching
         - ~/.gitconfig:/home/homestead/.gitconfig # Git configuration ( access alias && config )
         - ~/.ssh:/home/homestead/.ssh # Ssh keys for easy deployment inside the container
-        - ~/apps/www:/apps/www # all apps
-        - ~/apps/volumes/nginx/sites-available:/etc/nginx/sites-available # nginx sites ( in case you recreate the container )
-        - ~/apps/volumes/nginx/sites-enabled:/etc/nginx/sites-enabled # nginx sites ( in case you recreate the container )
+        - ~/apps/nginx-php-7.0/www:/apps/www # all apps
+        - ~/apps/nginx-php-7.0/volumes/nginx/sites-available:/etc/nginx/sites-available # nginx sites ( in case you recreate the container )
+        - ~/apps/nginx-php-7.0/volumes/nginx/sites-enabled:/etc/nginx/sites-enabled # nginx sites ( in case you recreate the container )
+        - ~/apps/nginx-php-7.0/volumes/nginx/php:/etc/php/7.0/fpm
     links:
         - mysql
 
 web2:
-    image: shincoder/homestead:php5.6
-    restart: always
-    container_name: nginx-php-5.6
-    ports:
-        - "8002:80"
-        - "2224:22"
-    volumes:
-        - ~/.composer:/home/homestead/.composer # composer caching
-        - ~/.gitconfig:/home/homestead/.gitconfig # Git configuration ( access alias && config )
-        - ~/.ssh:/home/homestead/.ssh # Ssh keys for easy deployment inside the container
-        - ~/apps/sites:/apps/www # all apps
-        - ~/apps/volumessites/nginx/sites-available:/etc/nginx/sites-available # nginx sites ( in case you recreate the container )
-        - ~/apps/volumessites/nginx/sites-enabled:/etc/nginx/sites-enabled # nginx sites ( in case you recreate the container )
-    links:
-        - mysql
-
-web3:
-    image: eagletec/apache:php7.1
+    image: leowgweb/apache-php-7.1
     restart: always
     container_name: apache-php-7.1
     ports:
-        - "80:80"
+        - "8000:80"
         - "2222:22"
     volumes:
         - ~/.composer:/home/homestead/.composer
         - ~/.gitconfig:/home/homestead/.gitconfig
         - ~/.ssh:/home/homestead/.ssh
-        - ~/apps/websites:/apps/www
-        - ~/apps/volumeswebsites/apache/sites-available:/etc/apache2/sites-available
-        - ~/apps/volumeswebsites/apache/sites-enabled:/etc/apache2/sites-enabled
-        - ~/apps/volumeswebsites/apache/php/:/usr/local/etc/php
+        - ~/apps/apache-php-7.1/www:/apps/www
+        - ~/apps/apache-php-7.1/volumes/apache/sites-available:/etc/apache2/sites-available
+        - ~/apps/apache-php-7.1/volumes/apache/sites-enabled:/etc/apache2/sites-enabled
+        - ~/apps/apache-php-7.1/volumes/apache/php/:/usr/local/etc/php
+    links:
+        - mysql
+
+web3:
+    image: leowgweb/nginx-php-5.6
+    restart: always
+    container_name: nginx-php-5.6
+    ports:
+        - "8001:80"
+        - "2223:22"
+    volumes:
+        - ~/.composer:/home/homestead/.composer # composer caching
+        - ~/.gitconfig:/home/homestead/.gitconfig # Git configuration ( access alias && config )
+        - ~/.ssh:/home/homestead/.ssh # Ssh keys for easy deployment inside the container
+        - ~/apps/nginx-php-5.6/www:/apps/www # all apps
+        - ~/apps/nginx-php-5.6/volumes/nginx/sites-available:/etc/nginx/sites-available # nginx sites ( in case you recreate the container )
+        - ~/apps/nginx-php-5.6/volumes/nginx/sites-enabled:/etc/nginx/sites-enabled # nginx sites ( in case you recreate the container )
+        - ~/apps/nginx-php-5.6/volumes/nginx/php:/etc/php5/fpm
     links:
         - mysql
 
@@ -63,7 +65,7 @@ phpmyadmin:
     environment:
         PMA_HOST: mysql
         MYSQL_USERNAME: "root"
-        MYSQL_ROOT_PASSWORD: "sites@eagle"
+        MYSQL_ROOT_PASSWORD: "root"
 
 mysql:
     image: mysql
@@ -72,6 +74,6 @@ mysql:
     ports:
         - "33060:3306"
     environment:
-        MYSQL_ROOT_PASSWORD: "sites@eagle"
+        MYSQL_ROOT_PASSWORD: "root"
     volumes:
-        - ~/apps/volumes/mysql:/var/lib/mysql # database files
+        - ~/apps/mysql:/var/lib/mysql # database files
