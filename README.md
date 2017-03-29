@@ -9,6 +9,8 @@ Esse ambiente docker monta 5 containers sendo eles:
 - mysql 5.7;
 - phpMyAdmin. 
 
+**Links dos projetos originais**
+
 - link do projeto original (https://github.com/shincoder/homestead-docker)
 - imagem oficial mysql (https://hub.docker.com/r/mysql/mysql-server/)
 - imagem oficial phpmyadmin (https://hub.docker.com/r/phpmyadmin/phpmyadmin)
@@ -56,11 +58,6 @@ sudo docker-compose up -d
 ### Entre no container php7.0 utilizando SSH (a senha solicitada é: secret)
 ```shell
 ssh -p 2221 homestead@localhost
-```
-
-### Entre no container apache-php7.1 utilizando SSH (a senha solicitada é: secret)
-```shell
-ssh -p 2222 homestead@localhost
 ```
 
 ### Entre no container php5.6 utilizando SSH (a senha solicitada é: secret)
