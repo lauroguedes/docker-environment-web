@@ -1,20 +1,19 @@
 web:
-    image: leowgweb/nginx-php-7.0
+    image: shincoder/homestead:php7.0
     restart: always
     container_name: nginx-php-7.0
     ports:
-        - "80:80" # web
-        - "2221:22" # ssh
-        - "35729:35729" # live reload
-        - "9876:9876" # karma server
+        - "80:80"
+        - "2221:22"
+        - "35729:35729"
+        - "9876:9876"
     volumes:
-        - ~/.composer:/home/homestead/.composer # composer caching
-        - ~/.gitconfig:/home/homestead/.gitconfig # Git configuration ( access alias && config )
-        - ~/.ssh:/home/homestead/.ssh # Ssh keys for easy deployment inside the container
-        - ~/apps/nginx-php-7.0/www:/apps/www # all apps
-        - ~/apps/nginx-php-7.0/volumes/nginx/sites-available:/etc/nginx/sites-available # nginx sites ( in case you recreate the container )
-        - ~/apps/nginx-php-7.0/volumes/nginx/sites-enabled:/etc/nginx/sites-enabled # nginx sites ( in case you recreate the container )
-        - ~/apps/nginx-php-7.0/volumes/nginx/php:/etc/php/7.0/fpm
+        - ~/.composer:/home/homestead/.composer
+        - ~/.gitconfig:/home/homestead/.gitconfig
+        - ~/.ssh:/home/homestead/.ssh
+        - ~/apps/nginx-php-7.0/www:/apps/www
+        - ~/apps/nginx-php-7.0/volumes/nginx/sites-available:/etc/nginx/sites-available
+        - ~/apps/nginx-php-7.0/volumes/nginx/sites-enabled:/etc/nginx/sites-enabled
     links:
         - mysql
 
@@ -32,25 +31,23 @@ web2:
         - ~/apps/apache-php-7.1/www:/apps/www
         - ~/apps/apache-php-7.1/volumes/apache/sites-available:/etc/apache2/sites-available
         - ~/apps/apache-php-7.1/volumes/apache/sites-enabled:/etc/apache2/sites-enabled
-        - ~/apps/apache-php-7.1/volumes/apache/php/:/usr/local/etc/php
     links:
         - mysql
 
 web3:
-    image: leowgweb/nginx-php-5.6
+    image: shincoder/homestead:php5.6
     restart: always
     container_name: nginx-php-5.6
     ports:
         - "8001:80"
         - "2223:22"
     volumes:
-        - ~/.composer:/home/homestead/.composer # composer caching
-        - ~/.gitconfig:/home/homestead/.gitconfig # Git configuration ( access alias && config )
-        - ~/.ssh:/home/homestead/.ssh # Ssh keys for easy deployment inside the container
-        - ~/apps/nginx-php-5.6/www:/apps/www # all apps
-        - ~/apps/nginx-php-5.6/volumes/nginx/sites-available:/etc/nginx/sites-available # nginx sites ( in case you recreate the container )
-        - ~/apps/nginx-php-5.6/volumes/nginx/sites-enabled:/etc/nginx/sites-enabled # nginx sites ( in case you recreate the container )
-        - ~/apps/nginx-php-5.6/volumes/nginx/php:/etc/php5/fpm
+        - ~/.composer:/home/homestead/.composer
+        - ~/.gitconfig:/home/homestead/.gitconfig
+        - ~/.ssh:/home/homestead/.ssh
+        - ~/apps/nginx-php-5.6/www:/apps/www
+        - ~/apps/nginx-php-5.6/volumes/nginx/sites-available:/etc/nginx/sites-available
+        - ~/apps/nginx-php-5.6/volumes/nginx/sites-enabled:/etc/nginx/sites-enabled
     links:
         - mysql
 
