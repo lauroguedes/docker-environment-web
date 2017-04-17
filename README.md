@@ -65,6 +65,11 @@ ssh -p 2221 homestead@localhost
 ssh -p 2223 homestead@localhost
 ```
 
+### Entre no container apache php7.1 utilizando SSH (a senha solicitada é: secret)
+```shell
+ssh -p 2222 homestead@localhost
+```
+
 ### Adicione virtual hosts aos projetos
 Supondo que sua pasta mapeada é a /apps então digite o seguinte comando dentro do container web
 
