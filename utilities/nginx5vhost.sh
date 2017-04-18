@@ -2,7 +2,7 @@
  
 echo "Criando configuração de VHost para o servidor"
 
-docker exec -d nginx-php-5.6 sh /serve.sh $1 $2
+docker exec -d nginx-php-5.6 sh /serve.sh $1 /apps/www/$2
 
 echo "127.0.0.1		$1" >> "/etc/hosts"
 
