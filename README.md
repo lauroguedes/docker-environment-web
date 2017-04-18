@@ -95,6 +95,14 @@ sudo nginx7vhost globalsys globalsys/appsys --alias
 
 No 2º parâmetro coloque o caminho sempre a partir da pasta **www**.
 
+**Execute os comandos de qualquer lugar**
+
+Basta copiar os comandos de criar virtual host para **/usr/local/bin** e depois execute o seguinte comando para dar permissão de execução:
+
+```shell
+sudo chmod +x /usr/local/bin/<comando>
+```
+
 ### Compartilhar pasta do servidor web com servidor windows
 Siga os links abaixo para realizar o compartilhamento de pastas entre servidor linux e windows
 
