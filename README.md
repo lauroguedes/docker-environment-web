@@ -3,9 +3,9 @@
 Esse ambiente foi criado para sanar a necessidade de utlilizar versões diferentes do php e de servidores web diferentes.
 
 Esse ambiente docker monta 5 containers sendo eles:
-- um ambiente Web nginx php7.0(php7, nginx, grunt, gulp, git, bower, redis, etc...);
-- um ambiente web nginx php5.6(php7, nginx, grunt, gulp, git, bower, redis, etc...);
-- um ambiente web apache php7.1;
+- um ambiente Web nginx php7.0(php7, nginx, grunt, gulp, git, bower, redis, npm, composer, etc...);
+- um ambiente web nginx php5.6(php5.6, nginx, grunt, gulp, git, bower, redis, npm, composer, etc...);
+- um ambiente web apache php7.1(php7.1, apache, composer, npm, gulp, git);
 - mysql 5.7;
 - phpMyAdmin. 
 
@@ -19,7 +19,7 @@ Esse ambiente docker monta 5 containers sendo eles:
 Antes de usar esse ambiente primeiramente deverá instalar o docker e o docker-compose em seu servidor.
 
 * Acesse esse material para instalar o docker em ambiente linux (https://docs.docker.com/installation/ubuntulinux/)
-* Acesse esse material para instalar o docker compose (https://docs.docker.com/compose/install/)
+* Acesse esse material para instalar o docker-compose (https://docs.docker.com/compose/install/)
 
 Após feita a instalação siga os passos seguintes
 
@@ -50,9 +50,14 @@ git clone https://github.com/lauroguedes/docker-environment-web.git
 ```
 
 ### Inicie os containers
-Antes de dar o comando abaixo, abra o arquivo docker-composer.dist.yaml e configure as portas, nome dos containers, senha do mysql e volumes de acordo com sua necessidade e salve o arquivo como **docker-composer.yaml**. 
+Antes de dar o comando abaixo, abra o arquivo docker-composer.dist.yaml e configure as portas, nome dos containers, senha do mysql e volumes de acordo com sua necessidade e salve o arquivo como **docker-composer.yaml**.
 ```shell
 sudo docker-compose up -d
+```
+Após os containers serem levantados, execute o seguinte arquivo que está na pasta **utilities**. Esse comando copia o arquivo **serve.sh** para os containers para proporcionar a criação de hosts automáticos e coloca os comandos de criação de host disponíveis para acesso de qualquer lugar do sistema.
+
+```shell
+sudo sh runonce.sh
 ```
 
 ### Entre no container php7.0 utilizando SSH (a senha solicitada é: secret)
@@ -85,7 +90,15 @@ Agora saia do container web digitando 'exit' para voltar ao servidor host e edit
 ```
 
 ### Virtual hosts de forma automática
-Para criar um virtual hosts de forma automática basta executar o arquivo **nginx7vhost.sh** para o container php7.0 e **nginx5vhost.sh** para o container php5.6 e **apachevhost.sh** para o container apache-php7.1 e passar os parâmetros pedidos como string do host e caminho do projeto.
+Para criar um virtual hosts de forma automática basta executar o arquivo **nginx7vhost.sh** para o container php7.0 e **nginx5vhost.sh** para o container php5.6 e **apachevhost.sh** para o container apache-php7.1 e passar os parâmetros: Ex: `comando <host> <caminlho> --alias(opcional)`. O parâmetro **--alias** fará com que crie um apelido no seu servidor para rodar comandos como composer, npm e gulp. 
+
+Para ilustrar esse cenário suponha que você esteja criando um virtual host para o projeto **globalsys** onde os arquivos que rodam o projeto está em **apps/nginx-php-7.0/www/globalsys/appsys** e você quer usar o composer nesse projeto. Então o camando para criar o virtual host no container será o seguinte:
+
+```shell
+sudo nginx7vhost globalsys globalsys/appsys --alias
+```
+
+No 2º parâmetro coloque o caminho sempre a partir da pasta **www**.
 
 ### Compartilhar pasta do servidor web com servidor windows
 Siga os links abaixo para realizar o compartilhamento de pastas entre servidor linux e windows
