@@ -54,11 +54,6 @@ Antes de dar o comando abaixo, abra o arquivo docker-composer.dist.yaml e config
 ```shell
 sudo docker-compose up -d
 ```
-Após os containers serem levantados, execute o seguinte arquivo que está na pasta **utilities**. Esse comando copia o arquivo **serve.sh** para os containers para proporcionar a criação de hosts automáticos e coloca os comandos de criação de host disponíveis para acesso de qualquer lugar do sistema.
-
-```shell
-sudo sh runonce.sh
-```
 
 ### Entre no container php7.0 utilizando SSH (a senha solicitada é: secret)
 ```shell
