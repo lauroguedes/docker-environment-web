@@ -4,6 +4,9 @@ block="server {
     listen 80;
     server_name $1;
     root /apps/www/$2;
+    
+    #Evita o erro 413 Request Entity Too Large. Coloque o mesmo valor da propriedade max_upload_size do php.ini
+    client_max_body_size 20M;
 
     index index.html index.htm index.php;
 
